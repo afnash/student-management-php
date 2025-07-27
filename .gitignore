@@ -1,0 +1,23 @@
+# Ignore database connection file (optional, consider if sensitive info is hardcoded)
+# db_connect.php
+
+# Ignore uploaded files
+uploads/
+
+# Ignore log files
+*.log
+!activity.log # If you specifically want to track the empty log file, but ignore its content.
+              # However, usually you ignore the log file entirely. For this project,
+              # since it's a deliverable, you might want to include an empty one.
+              # If you include an empty log file, but want git to ignore its content,
+              # you can use `git update-index --assume-unchanged activity.log` after adding it.
+              # For simplicity in a learning project, just ignore the directory it's in.
+activity.log
+
+# IDE and OS generated files
+.DS_Store
+.vscode/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+# Add any other files/folders you want to ignore
