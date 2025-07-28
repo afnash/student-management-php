@@ -1,7 +1,13 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
+
+<?php
 session_start();
 include 'db_connect.php';
-include 'functions.php'; // For logging if needed
+include 'functions.php';
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: index.php");
@@ -9,7 +15,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 
 $students = [];
-$sql = "SELECT id, name, email, date_of_birth, course, grade, profile_picture FROM students";
+$sql = "SELECT id, name, email, dob, course, grade, profile_pic FROM students";
 $result = $conn->query($sql);
 
 if ($result) {
@@ -19,7 +25,6 @@ if ($result) {
         }
     }
 } else {
-    // Error handling [cite: 11]
     echo "Error: " . $conn->error;
     logAction("Error fetching students: " . $conn->error);
 }
@@ -32,71 +37,314 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Students - Student Management System</title>
+    <link rel="stylesheet" href="modern-styles.css">
     <style>
-        body { font-family: sans-serif; }
-        .navbar { background-color: #333; overflow: hidden; }
-        .navbar a { float: left; display: block; color: white; text-align: center; padding: 14px 20px; text-decoration: none; }
-        .navbar a:hover { background-color: #ddd; color: black; }
-        .container { padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .actions a { margin-right: 10px; text-decoration: none; color: blue; }
-        .actions a.delete { color: red; }
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .page-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+        
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .table-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+            margin: 2rem 0;
+            animation: slideIn 0.8s ease;
+        }
+        
+        .table-header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .table-header h3 {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: transparent;
+        }
+        
+        .student-table th {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .student-table td {
+            padding: 1.5rem 1rem;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .student-table tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.01);
+        }
+        
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--glass-border);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-edit {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-delete {
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-edit:hover,
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn-add-student {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-add-student:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        @media (max-width: 768px) {
+            .student-table {
+                font-size: 0.9rem;
+            }
+            
+            .student-table th,
+            .student-table td {
+                padding: 1rem 0.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <a href="index.php">Home</a>
-        <a href="add_student.php">Add Student</a>
-        <a href="view_students.php">View Students</a>
-        <a href="search_student.php">Search Student</a>
-        <a href="logs.php">View Logs</a>
-        <a href="index.php?logout=true" style="float: right;">Logout</a>
+        <a href="index.php"><i class="fas fa-home"></i> Home</a>
+        <a href="add_student.php"><i class="fas fa-user-plus"></i> Add Student</a>
+        <a href="view_students.php"><i class="fas fa-users"></i> View Students</a>
+        <a href="search_student.php"><i class="fas fa-search"></i> Search Student</a>
+        <a href="logs.php"><i class="fas fa-list"></i> View Logs</a>
+        <a href="index.php?logout=true" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
-    <div class="container">
-        <h2>All Student Records</h2>
+    <div class="glass-container">
+        <div class="page-header">
+            <h1><i class="fas fa-users"></i> Student Records</h1>
+            <p>View and manage all student information</p>
+        </div>
+        
+        <div class="stats-summary">
+            <div class="stat-item">
+                <div class="stat-number"><?php echo count($students); ?></div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number"><?php echo count(array_filter($students, function($s) { return !empty($s['course']); })); ?></div>
+                <div class="stat-label">Enrolled</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number"><?php echo count(array_filter($students, function($s) { return !empty($s['profile_pic']); })); ?></div>
+                <div class="stat-label">With Photos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number"><?php echo count(array_unique(array_column($students, 'course'))); ?></div>
+                <div class="stat-label">Active Courses</div>
+            </div>
+        </div>
+        
         <?php if (empty($students)): ?>
-            <p>No student records found.</p>
+            <div class="empty-state">
+                <i class="fas fa-users"></i>
+                <h3>No Students Found</h3>
+                <p>There are currently no student records in the system.</p>
+                <a href="add_student.php" class="btn-add-student">
+                    <i class="fas fa-user-plus"></i> Add First Student
+                </a>
+            </div>
         <?php else: ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Date of Birth</th>
-                        <th>Course</th>
-                        <th>Grade</th>
-                        <th>Picture</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($students as $student): ?>
+            <div class="table-container">
+                <div class="table-header">
+                    <h3><i class="fas fa-list"></i> All Student Records</h3>
+                </div>
+                <table class="student-table">
+                    <thead>
                         <tr>
-                            <td><?php echo htmlspecialchars($student['id']); ?></td>
-                            <td><?php echo htmlspecialchars($student['name']); ?></td>
-                            <td><?php echo htmlspecialchars($student['email']); ?></td>
-                            <td><?php echo htmlspecialchars($student['date_of_birth']); ?></td>
-                            <td><?php echo htmlspecialchars($student['course']); ?></td>
-                            <td><?php echo htmlspecialchars($student['grade']); ?></td>
-                            <td>
-                                <?php if ($student['profile_picture']): ?>
-                                    <img src="<?php echo htmlspecialchars($student['profile_picture']); ?>" alt="Profile Picture" width="50">
-                                <?php else: ?>
-                                    No Picture
-                                <?php endif; ?>
-                            </td>
-                            <td class="actions">
-                                <a href="update_student.php?id=<?php echo $student['id']; ?>">Edit</a>
-                                <a href="delete_student.php?id=<?php echo $student['id']; ?>" class="delete" onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
-                            </td>
+                            <th><i class="fas fa-id-card"></i> ID</th>
+                            <th><i class="fas fa-user"></i> Name</th>
+                            <th><i class="fas fa-envelope"></i> Email</th>
+                            <th><i class="fas fa-calendar"></i> Date of Birth</th>
+                            <th><i class="fas fa-graduation-cap"></i> Course</th>
+                            <th><i class="fas fa-star"></i> Grade</th>
+                            <th><i class="fas fa-camera"></i> Photo</th>
+                            <th><i class="fas fa-cogs"></i> Actions</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($students as $student): ?>
+                            <tr>
+                                <td>#<?php echo htmlspecialchars($student['id']); ?></td>
+                                <td><?php echo htmlspecialchars($student['name']); ?></td>
+                                <td><?php echo htmlspecialchars($student['email']); ?></td>
+                                <td><?php echo htmlspecialchars($student['dob'] ? date('M d, Y', strtotime($student['dob'])) : 'N/A'); ?></td>
+                                <td><?php echo htmlspecialchars($student['course'] ?: 'N/A'); ?></td>
+                                <td><?php echo htmlspecialchars($student['grade'] ?: 'N/A'); ?></td>
+                                <td>
+                                    <?php if ($student['profile_pic']): ?>
+                                        <img src="<?php echo htmlspecialchars($student['profile_pic']); ?>" alt="Profile Picture" class="profile-pic">
+                                    <?php else: ?>
+                                        <div class="glass-icon" style="width: 40px; height: 40px; font-size: 1rem;">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="update_student.php?id=<?php echo $student['id']; ?>" class="btn-edit">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <a href="delete_student.php?id=<?php echo $student['id']; ?>" class="btn-delete" onclick="return confirm('Are you sure you want to delete this student?');">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php endif; ?>
     </div>
 </body>

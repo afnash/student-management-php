@@ -1,4 +1,11 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+// The rest of your PHP code follows
+?>
+
+<?php
 session_start();
 include 'db_connect.php';
 include 'functions.php';
@@ -13,12 +20,12 @@ if (isset($_GET['id'])) {
 
     if ($student_id > 0) {
         // First, get the profile picture path to delete the file 
-        $stmt_select = $conn->prepare("SELECT profile_picture FROM students WHERE id = ?");
+        $stmt_select = $conn->prepare("SELECT profile_pic FROM students WHERE id = ?");
         $stmt_select->bind_param("i", $student_id);
         $stmt_select->execute();
         $result_select = $stmt_select->get_result();
         $row = $result_select->fetch_assoc();
-        $profile_picture_to_delete = $row['profile_picture'] ?? '';
+        $profile_picture_to_delete = $row['profile_pic'] ?? '';
         $stmt_select->close();
 
         // Delete from database 
@@ -31,14 +38,14 @@ if (isset($_GET['id'])) {
         }
         $stmt_delete->bind_param("i", $student_id);
 
-        try { // Error and Exception Handling [cite: 11]
+        try {
             if ($stmt_delete->execute()) {
                 // Delete the profile picture file from the server 
                 if (!empty($profile_picture_to_delete) && file_exists($profile_picture_to_delete)) {
                     unlink($profile_picture_to_delete);
                 }
                 $_SESSION['delete_status'] = ['success' => true, 'message' => "Student deleted successfully!"];
-                logAction("Student deleted: ID " . $student_id); // Log student deletion 
+                logAction("Student deleted: ID " . $student_id);
             } else {
                 $_SESSION['delete_status'] = ['success' => false, 'message' => "Error deleting student: " . $stmt_delete->error];
                 logAction("Error deleting student: " . $stmt_delete->error);
