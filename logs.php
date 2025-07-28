@@ -50,7 +50,7 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         }
         
         .page-header h1 {
-            color: white;
+            color: var(--text-primary);
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
@@ -60,7 +60,7 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         }
         
         .page-header p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             font-size: 1.1rem;
         }
         
@@ -87,14 +87,14 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         }
         
         .logs-title {
-            color: white;
+            color: var(--text-primary);
             font-size: 1.5rem;
             font-weight: 600;
         }
         
         .logs-count {
             background: var(--gradient-secondary);
-            color: white;
+            color: var(--text-primary);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-size: 0.9rem;
@@ -108,8 +108,8 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         }
         
         .log-entry {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid rgba(148, 163, 184, 0.2);
             border-radius: 10px;
             padding: 1rem;
             margin-bottom: 1rem;
@@ -118,7 +118,7 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         }
         
         .log-entry:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.5);
             transform: translateX(5px);
         }
         
@@ -142,7 +142,7 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         }
         
         .log-timestamp {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(203, 213, 225, 0.6);
             font-size: 0.8rem;
             font-weight: 500;
             margin-bottom: 0.5rem;
@@ -151,7 +151,7 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         }
         
         .log-message {
-            color: white;
+            color: var(--text-primary);
             font-size: 1rem;
             line-height: 1.5;
         }
@@ -159,7 +159,7 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         .empty-logs {
             text-align: center;
             padding: 4rem 2rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
         }
         
         .empty-logs i {
@@ -171,7 +171,7 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         .empty-logs h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: white;
+            color: var(--text-primary);
         }
         
         .empty-logs p {
@@ -189,7 +189,7 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         
         .btn-clear-logs {
             background: var(--gradient-secondary);
-            color: white;
+            color: var(--text-primary);
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 10px;
@@ -209,7 +209,7 @@ if ($log_content && $log_content !== "Log file is empty." && $log_content !== "L
         
         .btn-refresh {
             background: var(--gradient-primary);
-            color: white;
+            color: var(--text-primary);
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 10px;

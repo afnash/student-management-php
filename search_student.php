@@ -47,7 +47,7 @@ $conn->close();
         }
         
         .page-header h1 {
-            color: white;
+            color: var(--text-primary);
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
@@ -57,7 +57,7 @@ $conn->close();
         }
         
         .page-header p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             font-size: 1.1rem;
         }
         
@@ -88,7 +88,7 @@ $conn->close();
         .search-input-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: white;
+            color: var(--text-primary);
             font-weight: 500;
             font-size: 0.9rem;
             text-transform: uppercase;
@@ -100,8 +100,8 @@ $conn->close();
             padding: 1rem 1.5rem;
             border: 1px solid var(--glass-border);
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-primary);
             font-size: 1rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
@@ -110,18 +110,18 @@ $conn->close();
         .search-input:focus {
             outline: none;
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(240, 147, 251, 0.1);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
             transform: translateY(-2px);
         }
         
         .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(203, 213, 225, 0.6);
         }
         
         .btn-search {
             padding: 1rem 2rem;
             background: var(--gradient-primary);
-            color: white;
+            color: var(--text-primary);
             border: none;
             border-radius: 12px;
             font-weight: 600;
@@ -168,14 +168,14 @@ $conn->close();
         }
         
         .results-title {
-            color: white;
+            color: var(--text-primary);
             font-size: 1.5rem;
             font-weight: 600;
         }
         
         .results-count {
             background: var(--gradient-secondary);
-            color: white;
+            color: var(--text-primary);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-size: 0.9rem;
@@ -185,7 +185,7 @@ $conn->close();
         .no-results {
             text-align: center;
             padding: 4rem 2rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
         }
         
         .no-results i {
@@ -197,7 +197,7 @@ $conn->close();
         .no-results h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: white;
+            color: var(--text-primary);
         }
         
         .no-results p {
@@ -233,13 +233,13 @@ $conn->close();
         }
         
         .student-info h3 {
-            color: white;
+            color: var(--text-primary);
             font-size: 1.2rem;
             margin-bottom: 0.5rem;
         }
         
         .student-info p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             margin-bottom: 0.25rem;
             font-size: 0.9rem;
         }
@@ -251,7 +251,7 @@ $conn->close();
         
         .btn-view {
             background: var(--gradient-primary);
-            color: white;
+            color: var(--text-primary);
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 8px;

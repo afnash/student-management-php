@@ -1,6 +1,13 @@
 <?php
+// Ensure proper session configuration
+ini_set('session.cookie_httponly', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_secure', 0); // Set to 1 if using HTTPS
+
 session_start();
 
+// Clear any output buffers to prevent header issues
+if (ob_get_level()) ob_end_clean();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
@@ -12,7 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($
         $_SESSION['username'] = $username;
         
         setcookie("theme", "dark", time() + (86400 * 2), "/"); 
-        header("Location: index.php"); 
+        
+        // Force session write and clear any output
+        session_write_close();
+        
+        // Redirect with cache-busting parameter
+        header("Location: index.php?t=" . time()); 
         exit();
     } else {
         $login_error = "Invalid username or password.";
@@ -29,7 +41,10 @@ if (isset($_GET['logout'])) {
 }
 
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+// Debug session state
+$is_logged_in = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+
+if (!$is_logged_in) {
    
 ?>
 <!DOCTYPE html>
@@ -37,6 +52,9 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Login - Student Management System</title>
     <link rel="stylesheet" href="modern-styles.css">
     <style>
@@ -79,7 +97,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         }
         
         .login-header h1 {
-            color: white;
+            color: var(--text-primary);
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
@@ -89,7 +107,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         }
         
         .login-header p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             font-size: 1.1rem;
         }
         
@@ -104,7 +122,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--text-primary);
             font-size: 2rem;
             animation: float 6s ease-in-out infinite;
         }
@@ -116,7 +134,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: white;
+            color: var(--text-primary);
             font-weight: 500;
             font-size: 0.9rem;
             text-transform: uppercase;
@@ -128,8 +146,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             padding: 1rem 1.5rem;
             border: 1px solid var(--glass-border);
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-primary);
             font-size: 1rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
@@ -138,19 +156,19 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         .form-group input:focus {
             outline: none;
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(240, 147, 251, 0.1);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
             transform: translateY(-2px);
         }
         
         .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(203, 213, 225, 0.6);
         }
         
         .btn-login {
             width: 100%;
             padding: 1rem 2rem;
             background: var(--gradient-primary);
-            color: white;
+            color: var(--text-primary);
             border: none;
             border-radius: 12px;
             font-weight: 600;
@@ -280,12 +298,23 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 <?php
 } else {
     $theme = isset($_COOKIE['theme']) ? $_COOKIE['theme'] : 'light';
+    
+    // Debug: Check if we're in the dashboard section
+    if (isset($_GET['debug'])) {
+        echo "<!-- Debug: Session data: " . print_r($_SESSION, true) . " -->";
+    }
+    
+    // Add a simple debug comment to verify we're in the dashboard section
+    echo "<!-- Dashboard section loaded - User: " . htmlspecialchars($_SESSION['username']) . " -->";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Dashboard - Student Management System</title>
     <link rel="stylesheet" href="modern-styles.css">
     <style>
@@ -301,7 +330,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         }
         
         .welcome-section h1 {
-            color: white;
+            color: var(--text-primary);
             font-size: 3rem;
             font-weight: 700;
             margin-bottom: 1rem;
@@ -311,7 +340,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         }
         
         .welcome-section p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             font-size: 1.2rem;
             margin-bottom: 2rem;
         }
@@ -339,7 +368,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             text-align: center;
             transition: all 0.3s ease;
             text-decoration: none;
-            color: white;
+            color: var(--text-primary);
             position: relative;
             overflow: hidden;
         }
@@ -396,7 +425,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <div class="dashboard-container">
         <div class="welcome-section">
             <h1>Welcome back, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
-            <p>Manage your student information with our modern dashboard</p>
+            <p>Manage your student information with our  dashboard</p>
         </div>
         
         <div class="stats-grid">

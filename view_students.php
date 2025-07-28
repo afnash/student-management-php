@@ -45,7 +45,7 @@ $conn->close();
         }
         
         .page-header h1 {
-            color: white;
+            color: var(--text-primary);
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
@@ -55,7 +55,7 @@ $conn->close();
         }
         
         .page-header p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             font-size: 1.1rem;
         }
         
@@ -84,12 +84,12 @@ $conn->close();
         .stat-number {
             font-size: 2rem;
             font-weight: 700;
-            color: white;
+            color: var(--text-primary);
             margin-bottom: 0.5rem;
         }
         
         .stat-label {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -108,13 +108,13 @@ $conn->close();
         }
         
         .table-header {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.4);
             padding: 1.5rem 2rem;
             border-bottom: 1px solid var(--glass-border);
         }
         
         .table-header h3 {
-            color: white;
+            color: var(--text-primary);
             font-size: 1.3rem;
             font-weight: 600;
             margin: 0;
@@ -127,8 +127,8 @@ $conn->close();
         }
         
         .student-table th {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: rgba(15, 23, 42, 0.4);
+            color: var(--text-primary);
             padding: 1.5rem 1rem;
             text-align: left;
             font-weight: 600;
@@ -140,13 +140,13 @@ $conn->close();
         
         .student-table td {
             padding: 1.5rem 1rem;
-            color: white;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
             transition: all 0.3s ease;
         }
         
         .student-table tr:hover td {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(99, 102, 241, 0.1);
             transform: scale(1.01);
         }
         
@@ -165,7 +165,7 @@ $conn->close();
         
         .btn-edit {
             background: var(--gradient-primary);
-            color: white;
+            color: var(--text-primary);
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 8px;
@@ -177,7 +177,7 @@ $conn->close();
         
         .btn-delete {
             background: var(--gradient-secondary);
-            color: white;
+            color: var(--text-primary);
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 8px;
@@ -196,7 +196,7 @@ $conn->close();
         .empty-state {
             text-align: center;
             padding: 4rem 2rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
         }
         
         .empty-state i {
@@ -208,7 +208,7 @@ $conn->close();
         .empty-state h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: white;
+            color: var(--text-primary);
         }
         
         .empty-state p {
@@ -218,7 +218,7 @@ $conn->close();
         
         .btn-add-student {
             background: var(--gradient-primary);
-            color: white;
+            color: var(--text-primary);
             padding: 1rem 2rem;
             border: none;
             border-radius: 12px;

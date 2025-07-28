@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date_of_birth = $_POST['date_of_birth'];
     $course = $_POST['course'];
     $grade = $_POST['grade'];
-    $current_profile_picture = $_POST['current_profile_pic'] ?? '';
+    $current_profile_picture = $_POST['current_profile_picture'] ?? '';
 
     $errors = validateStudentData($name, $email, $date_of_birth, $course, $grade);
 
@@ -136,7 +136,7 @@ $conn->close();
         }
         
         .page-header h1 {
-            color: white;
+            color: var(--text-primary);
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
@@ -146,7 +146,7 @@ $conn->close();
         }
         
         .page-header p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             font-size: 1.1rem;
         }
         
@@ -175,7 +175,7 @@ $conn->close();
         }
         
         .current-picture {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.4);
             border: 1px solid var(--glass-border);
             border-radius: 15px;
             padding: 1.5rem;
@@ -193,7 +193,7 @@ $conn->close();
         }
         
         .current-picture h4 {
-            color: white;
+            color: var(--text-primary);
             margin-bottom: 1rem;
         }
         
@@ -210,7 +210,7 @@ $conn->close();
         }
         
         .remove-picture-option label {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             font-size: 0.9rem;
             margin: 0;
         }
@@ -222,22 +222,22 @@ $conn->close();
             padding: 2rem;
             text-align: center;
             transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(15, 23, 42, 0.3);
         }
         
         .file-upload-container:hover {
             border-color: var(--accent-color);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.5);
         }
         
         .file-upload-container i {
             font-size: 3rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(203, 213, 225, 0.6);
             margin-bottom: 1rem;
         }
         
         .file-upload-container p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             margin-bottom: 1rem;
         }
         
@@ -255,7 +255,7 @@ $conn->close();
             width: 100%;
             padding: 1.5rem 2rem;
             background: var(--gradient-primary);
-            color: white;
+            color: var(--text-primary);
             border: none;
             border-radius: 12px;
             font-weight: 600;
@@ -338,7 +338,7 @@ $conn->close();
         
         <?php if ($student): ?>
             <form action="update_student.php?id=<?php echo $student['id']; ?>" method="post" enctype="multipart/form-data" class="form-container">
-                <input type="hidden" name="current_profile_pic" value="<?php echo htmlspecialchars($student['profile_pic']); ?>">
+                <input type="hidden" name="current_profile_picture" value="<?php echo htmlspecialchars($student['profile_pic']); ?>">
                 
                 <div class="form-row">
                     <div class="form-group">
@@ -398,7 +398,7 @@ $conn->close();
                         <i class="fas fa-cloud-upload-alt"></i>
                         <p>Click to upload or drag and drop</p>
                         <p style="font-size: 0.9rem; opacity: 0.7;">PNG, JPG, GIF up to 5MB</p>
-                        <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+                        <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
                     </div>
                 </div>
                 

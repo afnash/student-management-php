@@ -19,7 +19,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         }
         
         .page-header h1 {
-            color: white;
+            color: var(--text-primary);
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
@@ -29,7 +29,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         }
         
         .page-header p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             font-size: 1.1rem;
         }
         
@@ -64,22 +64,22 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             padding: 2rem;
             text-align: center;
             transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(15, 23, 42, 0.3);
         }
         
         .file-upload-container:hover {
             border-color: var(--accent-color);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.5);
         }
         
         .file-upload-container i {
             font-size: 3rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(203, 213, 225, 0.6);
             margin-bottom: 1rem;
         }
         
         .file-upload-container p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(248, 250, 252, 0.8);
             margin-bottom: 1rem;
         }
         
@@ -97,7 +97,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             width: 100%;
             padding: 1.5rem 2rem;
             background: var(--gradient-primary);
-            color: white;
+            color: var(--text-primary);
             border: none;
             border-radius: 12px;
             font-weight: 600;
